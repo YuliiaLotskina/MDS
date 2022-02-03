@@ -18,6 +18,7 @@ def TrancData(df):
     trancf=OrdinalEncoder()
     trancf.fit(df)    
     return trancf.transform(df)
+
 def mds(n,data, inf):
     mod=MDS(n_components=n, 
           metric=True, 
@@ -54,53 +55,6 @@ def plot2D(data_2,data_3, Y):
     fontsize=10, )    
     plt.show()
 
-    
-def NStress(data,inf,m):
-    stress = []
-    
-# Max value for n_components
-    if inf==1:
-        dist=manhattan_distances(data)
-        #gower.gower_matrix ( data )
-                                  
-    else: 
-        dist = euclidean_distances(data)
-        
-    max_range = 21
-    
-    for dim in range(1, max_range):
-    # Set up the MDS object
-        mds = MDS(n_components=dim, 
-                  metric=True, 
-                  n_init=4, 
-                  max_iter=300, 
-                  verbose=0, 
-                  eps=1e-12, 
-                  n_jobs=None, 
-                  dissimilarity='precomputed',normalize=True)
-            #MDS(n_components=dim, dissimilarity='precomputed', random_state=0, normalize=True)
-    # Apply MDS
-        
-        data_2 = mds.fit_transform(dist)
-        
-        
-    # Retrieve the stress value
-        stress.append(mds.stress_)
-    print(stress)
-# Plot stress vs. n_components    
-    return stress
-def plotStress(max_range,stress):
-    
-    plt.plot(range(1, max_range), stress)
-    plt.xticks(range(1, max_range, 2))
-    plt.xlabel('розмірність набору даних')
-    plt.title('Стрес MDS')
-    plt.ylabel('стрес')
-    plt.legend(('Manhattan distances'))
-    plt.show()
-    
-   
-
  def plot3D(data_2, Y,title):    
     ax = plt.subplot (projection = '3d')  
     ax1=ax.scatter (data_2[:, 0], data_2[:, 1], data_2[:,2], c=Y,cmap='brg') 
@@ -125,20 +79,11 @@ def plotMatrix(D1,D2):
     fontsize=10)
     plt.show()
     
-def save(data,data1,inf,inf2):
-    df = pd.DataFrame(data)
-    df1= pd.DataFrame(data1)
-    with pd.ExcelWriter('./MDS2.xlsx') as writer:  # doctest: +SKIP
-     df.to_excel(writer, sheet_name=inf)
-     df1.to_excel(writer, sheet_name=inf2)
-    print("Дані збережено в файлі 'MDS1.xlsx' ")
-    
 def main():
     df, Y=read()
     data=TrancData(df) 
     n=int(input("Введіть розмірність нового набору даних:\n"))
-    g_mds, D1,S1=mds(n,data, 1)
-    
+    g_mds, D1,S1=mds(n,data, 1) 
     eu_mds,D2,S2=mds(n,data, 2)
     print("Матриця (Manhattan MDS):\n",D1)
     print("Матриця (Euclidean MDS):\n",D2)
@@ -152,8 +97,6 @@ def main():
         plot3D(g_mds,Y,'MDS Manhattan distances')
         plot3D(eu_mds,Y,'MDS Euclidean distances')
     else: print("Для такої розмірності даних графічне відображення не реалізовано")
-    
-    #plotStress(21,NStress(data,2,20))
        
 
 if __name__ == '__main__':
