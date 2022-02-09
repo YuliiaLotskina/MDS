@@ -13,12 +13,12 @@ def read():
     Y=excel_data['Age'].values
     return excel_data, Y
 
-def TrancData(df):
+def TrancData(array_data):
     trancf=OrdinalEncoder()
-    trancf.fit(df)    
-    return trancf.transform(df)
+    trancf.fit(array_data)    
+    return trancf.transform(array_data)
 
-def mds(n,data, inf):
+def mds(n,data, distance):
     mod=MDS(n_components=n, 
           metric=True, 
           n_init=4, 
@@ -27,15 +27,15 @@ def mds(n,data, inf):
           eps=1e-12, 
           n_jobs=None, 
           dissimilarity='precomputed',normalize=True)    
-    if inf==1:
-        dist_g=manhattan_distances(data)       
-        data_2 = mod.fit_transform(dist_g) 
-        D=mod.dissimilarity_matrix_                                
+    if distance==1:
+        dist_manhattan=manhattan_distances(data)       
+        data_new = mod.fit_transform(dist_manhattan) 
+        matrix_distance=mod.dissimilarity_matrix_                                
     else: 
-        dist_e = euclidean_distances(data)
-        data_2 = mod.fit_transform(dist_e)
-        D=mod.dissimilarity_matrix_       
-    return data_2, D,mod.stress_
+        dist_euclidean = euclidean_distances(data)
+        data_new = mod.fit_transform(dist_euclidean)
+        matrix_distance=mod.dissimilarity_matrix_       
+    return data_new, matrix_distance,mod.stress_
 
 
 
