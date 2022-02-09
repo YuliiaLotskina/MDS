@@ -1,11 +1,10 @@
-import numpy as np
 import pandas as pd
 from sklearn.manifold import MDS
 import matplotlib.pyplot as plt
 import pandas
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.metrics.pairwise import manhattan_distances, euclidean_distances
-from mpl_toolkits.mplot3d import Axes3D # <--- This is important for 3d plotting 
+
 def read():
     path = input("Вкажіть шлях до файла з даними, розмірність яких бажаєте\nзменшити методом багатовимірного масштабування\n")
     excel_data = pd.read_excel(path)
@@ -55,7 +54,7 @@ def plot2D(data_2,data_3, Y):
     fontsize=10, )    
     plt.show()
 
- def plot3D(data_2, Y,title):    
+def plot3D(data_2, Y,title):    
     ax = plt.subplot (projection = '3d')  
     ax1=ax.scatter (data_2[:, 0], data_2[:, 1], data_2[:,2], c=Y,cmap='brg') 
     plt.colorbar(ax1)
